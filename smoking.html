@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quit Smoking Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #111827;
+        }
+        .timer-card {
+            background: linear-gradient(145deg, #1f2937, #111827);
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.5), -10px -10px 20px rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="timer-card w-full max-w-2xl rounded-3xl p-8 md:p-12 text-center border-4 border-lime-500">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-lime-400">Time Since Quitting</h1>
+        <p id="target-date-display" class="text-lg md:text-xl text-gray-400 mb-8"></p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
+            <!-- Days -->
+            <div class="bg-gray-800 p-4 md:p-6 rounded-2xl shadow-inner border-2 border-gray-700">
+                <div id="days" class="text-4xl md:text-6xl font-extrabold text-white">0</div>
+                <div class="text-xs md:text-sm text-lime-400 mt-2">DAYS</div>
+            </div>
+            <!-- Hours -->
+            <div class="bg-gray-800 p-4 md:p-6 rounded-2xl shadow-inner border-2 border-gray-700">
+                <div id="hours" class="text-4xl md:text-6xl font-extrabold text-white">0</div>
+                <div class="text-xs md:text-sm text-lime-400 mt-2">HOURS</div>
+            </div>
+            <!-- Minutes -->
+            <div class="bg-gray-800 p-4 md:p-6 rounded-2xl shadow-inner border-2 border-gray-700">
+                <div id="minutes" class="text-4xl md:text-6xl font-extrabold text-white">0</div>
+                <div class="text-xs md:text-sm text-lime-400 mt-2">MINUTES</div>
+            </div>
+            <!-- Seconds -->
+            <div class="bg-gray-800 p-4 md:p-6 rounded-2xl shadow-inner border-2 border-gray-700">
+                <div id="seconds" class="text-4xl md:text-6xl font-extrabold text-white">0</div>
+                <div class="text-xs md:text-sm text-lime-400 mt-2">SECONDS</div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        const targetDateDisplay = document.getElementById('target-date-display');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        // Hard-coded quit date and time to ensure the timer is persistent.
+        // This is based on the current date: Tuesday, September 23, 2025 at 11:59 PM EDT.
+        const targetDate = new Date('2025-09-23T23:59:00');
+
+        const updateDisplay = () => {
+            targetDateDisplay.textContent = `Your quit date was: ${targetDate.toLocaleDateString()} at ${targetDate.toLocaleTimeString()}`;
+        };
+
+        const updateTimer = () => {
+            const now = new Date();
+            const difference = now - targetDate;
+
+            if (difference < 0) {
+                daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '0';
+                targetDateDisplay.textContent = "Your timer will start once you've quit!";
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            daysEl.textContent = days;
+            hoursEl.textContent = hours.toString().padStart(2, '0');
+            minutesEl.textContent = minutes.toString().padStart(2, '0');
+            secondsEl.textContent = seconds.toString().padStart(2, '0');
+        };
+
+        // Initial load and timer update
+        updateDisplay();
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
+
